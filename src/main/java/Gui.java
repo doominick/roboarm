@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 
  class Gui {
@@ -9,8 +11,6 @@ import java.awt.event.MouseListener;
     private FlowLayout windowLayout = new FlowLayout();
 
     private JLabel rotationSliderLabel = new JLabel("Rotation");
-
-    private MouseListener saveWhenMouseReleased = new saveWhenMouseReleased();
 
     private JLabel grabberSliderLabel = new JLabel("Grabber");
 
@@ -30,6 +30,8 @@ import java.awt.event.MouseListener;
 
     private JButton connectButton = new JButton("Connect");
 
+    private MouseListener saveWhenMouseReleased = new saveWhenMouseReleased();
+
     private Arm arm = new Arm();
 
     private SerialCommunication serial = new SerialCommunication();
@@ -44,6 +46,15 @@ import java.awt.event.MouseListener;
 //      window.setPreferredSize(windowSize);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setLocationRelativeTo(null);
+
+        connectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (connectButton.getText().equals("Connect")){
+                    serial.connect(portList.getSelectedItem().toString());
+                }
+            }
+        });
 
         rotationSlider.setMaximum(180);
         rotationSlider.addChangeListener(changeEvent -> serial.sendCommand(arm.setRotationPosition(rotationSlider.getValue())));
