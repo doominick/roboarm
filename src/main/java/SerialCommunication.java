@@ -14,8 +14,9 @@ public class SerialCommunication {
         serialPort = new SerialPort(portName);
         try {
             System.out.println("Port opened: " + serialPort.openPort());
-            System.out.println("Params setted: " + serialPort.setParams(9600, 8, 1, 0));
-            Thread.sleep(1500);
+            System.out.println("Params set: " + serialPort.setParams(9600, 8, 1, 0));
+            Thread.sleep(2000);
+            System.out.println(serialPort.readString());
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -37,6 +38,16 @@ public class SerialCommunication {
     public void sendCommand(int command){
         try {
             System.out.println(command + " sent: " + serialPort.writeInt(command));
+            System.out.println(serialPort.readString());
+        } catch (SerialPortException e){
+            System.out.println(e);
+        }
+    }
+
+    public void sendString(String string){
+        try {
+            System.out.println(string + " sent: " + serialPort.writeBytes(string.getBytes()));
+            System.out.println(serialPort.readString());
         } catch (SerialPortException e){
             System.out.println(e);
         }

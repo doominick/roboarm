@@ -30,6 +30,8 @@ import java.awt.event.MouseListener;
 
     private JButton connectButton = new JButton("Connect");
 
+    private JButton testButton = new JButton("LED test");
+
     private MouseListener saveWhenMouseReleased = new saveWhenMouseReleased();
 
     private Arm arm = new Arm();
@@ -52,9 +54,20 @@ import java.awt.event.MouseListener;
             public void actionPerformed(ActionEvent actionEvent) {
                 if (connectButton.getText().equals("Connect")){
                     serial.connect(portList.getSelectedItem().toString());
+                    connectButton.setText("Disconnect");
+                    portList.setEnabled(false);
+                    testButton.setEnabled(true);
+                } else if (connectButton.getText().equals("Disconnect")){
+                    serial.disconnect();
+                    connectButton.setText("Connect");
+                    portList.setEnabled(true);
+                    testButton.setEnabled(false);
                 }
             }
         });
+
+        testButton.setEnabled(false);
+        testButton.addActionListener(al -> serial.sendString("Dupa"));
 
         rotationSlider.setMaximum(180);
         rotationSlider.addChangeListener(changeEvent -> serial.sendCommand(arm.setRotationPosition(rotationSlider.getValue())));
@@ -74,6 +87,7 @@ import java.awt.event.MouseListener;
 
         window.add(portList);
         window.add(connectButton);
+        window.add(testButton);
         window.add(rotationSliderLabel);
         window.add(rotationSlider);
         window.add(rightArmSliderLabel);
